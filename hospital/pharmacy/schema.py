@@ -34,6 +34,7 @@ class Query(graphene.ObjectType):
         return Order.objects.filter(customer__code=customer_code).count()
 
 # Define an input type for the order data
+ 
 class OrderInput(graphene.InputObjectType):
     customer_code = graphene.String(required=True)
     item = graphene.String(required=True)
@@ -59,8 +60,8 @@ class AddOrder(graphene.Mutation):
             amount=order_data.amount
         )
         
-        order_details = f"Item: {order_data['item']}, Amount: {order_data['amount']}, Time: {order_data['time']}"
-        recipient = order_data['customer'].phone_number 
+        order_details = f"Item: {order_data['item']}, Amount: {order_data['amount']}"
+        recipient = Customer.phone_number 
         send_sms(recipient, order_details)
         # Return the created order
         return AddOrder(order=order)
