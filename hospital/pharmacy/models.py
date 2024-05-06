@@ -5,6 +5,7 @@ from django.db import models
 class Customer(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=15)
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

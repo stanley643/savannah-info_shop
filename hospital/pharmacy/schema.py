@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from .models import Customer, Order
+from .utils import send_sms
 
 class CustomerType(DjangoObjectType):
     class Meta:
@@ -58,12 +59,62 @@ class AddOrder(graphene.Mutation):
             amount=order_data.amount
         )
         
+        order_details = f"Item: {order_data['item']}, Amount: {order_data['amount']}, Time: {order_data['time']}"
+        recipient = order_data['customer'].phone_number 
+        send_sms(recipient, order_details)
         # Return the created order
         return AddOrder(order=order)
+
+# Mutation for updating an existing order
+class UpdateOrder(graphene.Mutation):
+    class Arguments:
+        order_id = graphene.Int(required=True)
+        order_data = OrderInput(required=True)
+
+    # Define the return fields of the mutation
+    order = graphene.Field(OrderType)
+
+    @staticmethod
+    def mutate(root, info, order_id, order_data):
+        # Retrieve the order object to update
+        order = Order.objects.get(id=order_id)
+        
+        # Update the order fields
+        order.item = order_data.item
+        order.amount = order_data.amount
+        
+        # Save the updated order
+        order.save()
+        
+        # Return the updated order
+        return UpdateOrder(order=order)
+
+# Mutation for deleting an existing order
+class DeleteOrder(graphene.Mutation):
+    class Arguments:
+        order_id = graphene.Int(required=True)
+
+    # Define the return fields of the mutation
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, info, order_id):
+        try:
+            # Retrieve the order object to delete
+            order = Order.objects.get(id=order_id)
+            
+            # Delete the order
+            order.delete()
+            
+            return DeleteOrder(success=True)
+        except Order.DoesNotExist:
+            return DeleteOrder(success=False)
 
 # Mutation class
 class Mutation(graphene.ObjectType):
     add_order = AddOrder.Field()
+    update_order = UpdateOrder.Field()
+    delete_order = DeleteOrder.Field()
 
 # Schema
 schema = graphene.Schema(query=Query, mutation=Mutation)
