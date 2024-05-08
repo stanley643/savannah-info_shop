@@ -107,8 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AFRICASTALKING_USERNAME = 'nmurigi@kabarak.ac.ke'
-AFRICASTALKING_API_KEY = '34026a891d915dd6626969b07aad53f0580322ef6601335101b67cb0ccfd33c2'
+AFRICASTALKING_USERNAME = 'sandbox'
+AFRICASTALKING_API_KEY = '7de1232987daa3b2325fd5a46531d0a42a2db367fb399495e5239541b8a4ea97'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, Customer, Item
+from .models import Order, Customer
 # Register your models here.
 @admin.register(Customer)
 class Customer(admin.ModelAdmin):
@@ -7,9 +7,4 @@ class Customer(admin.ModelAdmin):
 
 @admin.register(Order)
 class Order(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Item)
-class Item(admin.ModelAdmin):
     pass

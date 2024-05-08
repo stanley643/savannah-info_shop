@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from .models import Customer, Order
 from .utils import send_sms
+import datetime
 
 class CustomerType(DjangoObjectType):
     class Meta:
@@ -39,6 +40,8 @@ class OrderInput(graphene.InputObjectType):
     customer_code = graphene.String(required=True)
     item = graphene.String(required=True)
     amount = graphene.Decimal(required=True)
+    #time = graphene.DateTime(required=True)
+    
 
 # Mutation for adding a new order
 class AddOrder(graphene.Mutation):
@@ -53,15 +56,18 @@ class AddOrder(graphene.Mutation):
         # Retrieve the customer object based on the provided code
         customer = Customer.objects.get(code=order_data.customer_code)
         
+        current_time = datetime.datetime.now()
         # Create a new order object
         order = Order.objects.create(
             customer=customer,
             item=order_data.item,
-            amount=order_data.amount
+            amount=order_data.amount,
+            time=current_time
         )
         
-        order_details = f"Item: {order_data['item']}, Amount: {order_data['amount']}"
-        recipient = Customer.phone_number 
+        order_details = f"Your order Item: {order_data.item}, Amount: {str(order_data.amount)}, was successfully made at: {str(order_data.time)}"
+
+        recipient = customer.phone_number 
         send_sms(recipient, order_details)
         # Return the created order
         return AddOrder(order=order)
