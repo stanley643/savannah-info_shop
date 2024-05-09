@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'pharmacy',
-    'django_graphiql'
+    'django_graphiql',
+    'oidc_provider',
+    'django_auth0'
     
 ]
 
@@ -88,6 +90,14 @@ DATABASES = {
     }
 }
 
+OIDC_PROVIDERS = {
+    'default': {
+        'SCOPES': ['openid', 'email'],
+        'CLIENT_ID': 'Pisvg8EZzUWAKw0MsLzrISnue8heRd5y',
+        'CLIENT_SECRET': 'cUI7c44eKA0uk4CE5JnRGBzjsSRsbYfm66za3-gsM4Quni0_YJ0BPbGOM3g6ZkDp',
+        'ISSUER': 'http://localhost:8000',  # Replace with your actual domain
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
