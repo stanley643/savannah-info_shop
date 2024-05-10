@@ -24,7 +24,7 @@ class GraphQLTests(TestCase):
             }
         }''')
         self.assertIsNone(response.get('errors'))
-        # Add more assertions as needed
+       
     
     def test_mutation_add_order(self):
         response = self.client.execute('''
@@ -45,7 +45,7 @@ class GraphQLTests(TestCase):
             }
         ''')
         self.assertIsNone(response.get('errors'))
-        # Add more assertions as needed
+        
 
     def test_mutation_add_customer(self):
         response = self.client.execute('''
@@ -63,9 +63,7 @@ class GraphQLTests(TestCase):
             }
         ''')
         self.assertIsNone(response.get('errors'))
-        # Add more assertions as needed
-
-    # Add more test cases as needed
+        
 
 class TestUtils(TestCase):
     def test_send_sms(self):
