@@ -116,12 +116,39 @@ class DeleteOrder(graphene.Mutation):
             return DeleteOrder(success=True)
         except Order.DoesNotExist:
             return DeleteOrder(success=False)
+        
+# Define an input type for the customer data
+class CustomerInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    code = graphene.String(required=True)
+    phone_number = graphene.String(required=True)
+
+# Mutation for adding a new customer
+class AddCustomer(graphene.Mutation):
+    class Arguments:
+        customer_data = CustomerInput(required=True)
+
+    # Define the return fields of the mutation
+    customer = graphene.Field(CustomerType)
+
+    @staticmethod
+    def mutate(root, info, customer_data):
+        # Create a new customer object
+        customer = Customer.objects.create(
+            name=customer_data.name,
+            code=customer_data.code,
+            phone_number=customer_data.phone_number
+        )
+        # Return the created customer
+        return AddCustomer(customer=customer)
+
 
 # Mutation class
 class Mutation(graphene.ObjectType):
     add_order = AddOrder.Field()
     update_order = UpdateOrder.Field()
     delete_order = DeleteOrder.Field()
+    add_customer = AddCustomer.Field()
 
 # Schema
 schema = graphene.Schema(query=Query, mutation=Mutation)
