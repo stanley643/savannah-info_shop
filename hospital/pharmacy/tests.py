@@ -8,12 +8,18 @@ from django.utils import timezone
 
 class GraphQLTests(TestCase):
     def setUp(self):
-        self.client = Client(schema)
+            self.client = Client(schema)
+            # Create a customer for testing
+            self.customer = Customer.objects.create(
+                name="Test Customer",
+                code="1253",
+                phone_number="+254790180140"
+            )
 
     def test_query_all_customers(self):
         response = self.client.execute('''{
             allCustomers {
-                id
+                code
                 name
             }
         }''')
@@ -24,14 +30,14 @@ class GraphQLTests(TestCase):
         response = self.client.execute('''
             mutation {
                 addOrder(orderData: {
-                    customerCode: "123",
+                    customerCode: "1253",
                     item: "Test Item",
                     amount: 100
                 }) {
                     order {
                         id
                         customer {
-                            id
+                            code
                         }
                         item
                     }
@@ -47,10 +53,10 @@ class GraphQLTests(TestCase):
                 addCustomer(customerData: {
                     name: "Test Customer",
                     code: "123",
-                    phoneNumber: "1234567890"
+                    phoneNumber: "+254790180140"
                 }) {
                     customer {
-                        id
+                        code
                         name
                     }
                 }
