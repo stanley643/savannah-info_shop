@@ -1,6 +1,5 @@
 africastalking==1.2.7
 aniso8601==9.0.1
-asgiref==3.x
 certifi==2024.2.2
 charset-normalizer==3.3.2
 Django==4.x
